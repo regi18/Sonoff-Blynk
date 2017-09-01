@@ -106,6 +106,6 @@ void loop()
   if (Blynk.connected()) {
     Blynk.run();
   }
-  timer.run();
+  timer.run();g
 }
 
