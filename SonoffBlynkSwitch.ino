@@ -1,7 +1,6 @@
 /* 
 Code written by regi18
 Github: https://github.com/regi18/Sonoff-Blynk
-Youtube: https://www.youtube.com/channel/UCUFX2Hq9mJd8NlDkqI-DXHA
 Steemit: https://steemit.com/@regi18
 */
 
