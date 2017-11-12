@@ -1,6 +1,6 @@
 /***************************************************
  Created by: regi18
- Version: 2.3
+ Version: 2.1.1
  Github: https://github.com/regi18/Sonoff-Blynk
  **************************************************/
 
