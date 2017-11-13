@@ -1,6 +1,6 @@
 /***************************************************
  Created by: regi18
- Version: 2.1.1
+ Version: 2.1.2
  Github: https://github.com/regi18/Sonoff-Blynk
  **************************************************/
 
@@ -54,7 +54,8 @@ void setup()
   dht.begin();
   timer.setInterval(1000L, getDhtData);
   timer.setInterval(1000L, sendUptime);
-  timer.setInterval(20000L, sendDataTS);
+  /* Set the interval for sending data to Thingspeak.com (now is 300000 = 5 minutes) */
+  timer.setInterval(300000L, sendDataTS);
   timer.setInterval(10000L, CheckConnection);
   digitalWrite(led, LOW);
   delay(700);
@@ -140,7 +141,7 @@ BLYNK_WRITE(V0){
 }
 
 /***************************************************
- * check every 11s if connected to Blynk server
+ * check every 10s if connected to Blynk server
  **************************************************/
 void CheckConnection(){
   if(!Blynk.connected()){
