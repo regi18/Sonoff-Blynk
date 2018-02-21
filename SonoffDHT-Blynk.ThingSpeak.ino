@@ -12,7 +12,7 @@ WiFiClient client;
 #include <BlynkSimpleEsp8266.h>
 char auth[] = "BLYNK AUTH TOKEN";
 char ssid[] = "SSID";
-char pass[] = "WIFI PASSOWRD";
+char pass[] = "WIFI PASSWORD";
 
 /* Thingspeak */
 const char* TS_SERVER = "api.thingspeak.com";
@@ -34,7 +34,6 @@ float temp = 0;
 int i;
 int relay = 12;
 int led = 13;
-int buttonstate;
 
 BlynkTimer timer;
 
@@ -131,13 +130,7 @@ void sendDataTS(void)
  **************************************************/
 BLYNK_WRITE(V0){
   i = param.asInt();
-  if (i == 1){
-        digitalWrite(12, HIGH);
-        
-     }  
-    else if (i == 0){
-        digitalWrite(12, LOW);
-    }
+  digitalWrite(12, i);
 }
 
 /***************************************************
