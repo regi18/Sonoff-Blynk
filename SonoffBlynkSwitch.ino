@@ -5,7 +5,6 @@ Steemit: https://steemit.com/@regi18
 */
 
 
-
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
@@ -21,7 +20,6 @@ char pass[] = "WIFI PASSWORD";
 int i;                       //integer for virtual pin
 int relay = 12;              //relay switch
 int led = 13;                //led pin
-int buttonstate;             //the state of the switch   
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
 
@@ -56,38 +54,24 @@ BLYNK_CONNECTED() {
     Blynk.syncAll();
 }
 
-BLYNK_WRITE(V0){        //Read virtual pin 0 and turn on/off relay and led
+//Read virtual pin 0 and turn on/off relay and led
+BLYNK_WRITE(V0){
   i = param.asInt();
-  if (i == 1){
-        digitalWrite(relay, HIGH);
-        digitalWrite(led, HIGH);
-        
-     }  
-    else if (i == 0){
-        digitalWrite(relay, LOW);
-        digitalWrite(led, LOW);
-    }
+  digitalWrite(relay, i);
+  digitalWrite(led, i);
 }
 
-void checkPhysicalButton(){       //void for check physical switch
-  buttonState = digitalRead(14);
-  if (buttonState != lastButtonState) {
-    if(i == 1){
-      Blynk.virtualWrite(V0, 0);
-      digitalWrite(led, 0);
-      digitalWrite(relay, 0);
-      i = 0;
-      }
-     else if (i == 0){
-      Blynk.virtualWrite(V0, 1);
-      digitalWrite(led, 1);
-      digitalWrite(relay, 1);
-      i = 1;
-     }
+//void for check physical switch    
+void checkPhysicalButton(){
+    buttonState = digitalRead(14);
+    if (buttonState != lastButtonState) {
+       Blynk.virtualWrite(V0, !i);
+       digitalWrite(led, !i);
+       digitalWrite(relay, !i);
+       i = !i;
     }
-   lastButtonState = buttonState;
+    lastButtonState = buttonState;
 }
-
 
 void reconnectBlynk() {
     if (!Blynk.connected()) {
