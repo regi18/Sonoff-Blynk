@@ -1,94 +1,93 @@
-/* 
-Code written by regi18
-Github: https://github.com/regi18/Sonoff-Blynk
-Steemit: https://steemit.com/@regi18
-*/
+/***************************************************
+ Created by: regi18
+ Version: 3.1.2
+ Github: https://github.com/regi18/Sonoff-Blynk
+ **************************************************/
 
-
+/* Libraries */
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 
-// You should get Auth Token in the Blynk App.
-// Go to the Project Settings (nut icon).
-char auth[] = "BLYNK AUTH TOKEN";
+/*** Here are the things that you have to change ***/
+/***************************************************/
 
-// Your WiFi credentials.
-// Set password to "" for open networks.
-char ssid[] = "SSID";
-char pass[] = "WIFI PASSWORD";
+/* Blynk AUTH key */
+char const AUTH[] = "BLYNK AUTH TOKEN";
 
-int i;                       //integer for virtual pin
-int relay = 12;              //relay switch
-int led = 13;                //led pin
-int buttonState = 0;         // current state of the button
-int lastButtonState = 0;     // previous state of the button
+/* Wi-Fi Details */
+char const SSID[] = "SSID";
+char const PASS[] = "WIFI PASSWORD";
+char const HOSTNAME[] = "HOSTNAME";
+char const OTAPSW[] = "OTA PASSWORD";
 
+/* Blynk Virtual Pins */
+#define RELAYVPIN V5
+
+/* Device Pins */
+#define RELAY 12
+#define LED 13
+#define BUTTON 0
+
+/**************************************************/
+
+
+
+/* General variables and declarations */
 BlynkTimer timer;
-void checkPhysicalButton();
-  
+volatile bool state;
+
+
 void setup()
 {
-  Blynk.begin(auth, ssid, pass);
-  while (Blynk.connect() == false)
-  {
-    // Wait until connected
-  }
-  pinMode(led,OUTPUT);        //blink for visual effect that is connected
-  digitalWrite(led, LOW);
-  delay(450);
-  digitalWrite(led, HIGH);
-  delay(450);
-  digitalWrite(led, LOW);
-  delay(450);
-  digitalWrite(led, HIGH);
-  delay(450);
-  digitalWrite(led, LOW);
-  delay(450);
-  digitalWrite(led, HIGH);
-  pinMode(relay,OUTPUT);
-  pinMode(14, INPUT);
-  timer.setInterval(100L, checkPhysicalButton);
+  pinMode(LED,OUTPUT);
+  pinMode(RELAY,OUTPUT);
+  pinMode(BUTTON,INPUT);
+  
+  WiFi.hostname(HOSTNAME);
+  Blynk.begin(AUTH, SSID, PASS);
+
+  ArduinoOTA.setPassword(OTAPSW);
+  ArduinoOTA.setHostname(HOSTNAME);
+  ArduinoOTA.begin();
+
+  attachInterrupt(digitalPinToInterrupt(BUTTON), handleButton, FALLING);
+  
+  digitalWrite(LED, LOW);
+  delay(700);
+  digitalWrite(LED, HIGH);
+  delay(700);
+  digitalWrite(LED, LOW);
+  delay(700);
+  digitalWrite(LED, HIGH);
 }
 
 BLYNK_CONNECTED() {
     Blynk.syncAll();
 }
 
-//Read virtual pin 0 and turn on/off relay and led
-BLYNK_WRITE(V0){
-  i = param.asInt();
-  digitalWrite(relay, i);
-  digitalWrite(led, i);
-}
-
-//void for check physical switch    
-void checkPhysicalButton(){
-    buttonState = digitalRead(14);
-    if (buttonState != lastButtonState) {
-       Blynk.virtualWrite(V0, !i);
-       digitalWrite(led, !i);
-       digitalWrite(relay, !i);
-       i = !i;
-    }
-    lastButtonState = buttonState;
-}
-
-void reconnectBlynk() {
-    if (!Blynk.connected()) {
-      if(Blynk.connect()) {
-          BLYNK_LOG("Reconnected");
-      }
-      else {
-          BLYNK_LOG("Not reconnected");
-      }
- }
-}
-
-void loop()
-{
-  if (Blynk.connected()) {
-    Blynk.run();
-  }
+void loop() {
+  if (Blynk.connected()) { Blynk.run(); }
+  else { Blynk.connect(); }
   timer.run();
+  ArduinoOTA.handle();
 }
 
+/***************************************************
+ * Read virtual pin 0 and turn on/off relay
+ **************************************************/
+BLYNK_WRITE(RELAYVPIN){
+  state = param.asInt();
+  digitalWrite(RELAY, state);
+}
+
+/***************************************************
+ * Handle the interrupt
+ **************************************************/
+void handleButton()
+{
+  state = !state;
+  Blynk.virtualWrite(RELAYVPIN, state);
+  digitalWrite(RELAY, state);
+}
