@@ -1,9 +1,11 @@
 # Sonoff-Blynk
 Connect your sonoff outlet to the internet and control it using the blynk app.
-There are 2 variant of the code:
+There are 3 variants of the code:
 * SonoffDHT-Blynk.ThingSpeak; it allow you to connect a DHT22 (or DHT11) to the sonoff, read the temperature in the blynk app and log it in Thingspeak.com 
 
 * SonoffBlynkSwitch; it allow you  to connect a wall switch (or any switch) to the sonoff to toggle the relay
+
+* Sonoff+Button; it's a simple sketch for just controlling a Sonoff via the Blynk app and via the physical button
 
 
 ## Getting Started
