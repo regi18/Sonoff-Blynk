@@ -28,11 +28,13 @@ The WI-Fi Password and Credential, the Blynk auth token, the ThingSpeak api key,
 ```
 For example:
 
-/* Thingspeak */
-const char* TS_SERVER = "api.thingspeak.com";
-String TS_API_KEY ="THINGSPEAK API KEY";
+/*** Here are the things that you have to change ***/
+/***************************************************/
 
-You have to change "THINGSPEAK API KEY"
+/* Blynk AUTH key */
+char const AUTH[] = "BLYNK AUTH TOKEN";
+
+You have to change "BLYNK AUTH TOKEN"
 ```
 
 ## Authors
