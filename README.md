@@ -5,8 +5,11 @@ There are 3 variants of the code:
 
 * **SonoffBlynkSwitch**; it allow you  to connect a wall switch (or any switch) to the sonoff to toggle the relay
 
-* **Sonoff+Button**; it's a simple sketch for just controlling a Sonoff via the Blynk app and via the physical button
+* **Sonoff+Button**; it's a simple sketch for just controlling a Sonoff via the Blynk app and via the physical button<br><br>
 
+
+### :warning: There's a new, improved version at https://github.com/regi18/Espegi
+<br><br>
 
 ## Getting Started
 
